@@ -10,12 +10,14 @@
 
 #include <asio/io_context.hpp>
 #include <asio/ip/udp.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <vector>
 #include "allocator.hpp"
+
+#define boost ::std
 
 using asio::ip::udp;
 
@@ -41,7 +43,7 @@ public:
 
       if (!ec)
       {
-        for (std::size_t i = 0; i < n; ++i) buffer_[i] = ~buffer_[i];
+        // for (std::size_t i = 0; i < n; ++i) buffer_[i] = ~buffer_[i];
         socket_.send_to(asio::buffer(buffer_, n), sender_, 0, ec);
       }
     }

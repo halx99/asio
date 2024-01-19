@@ -11,17 +11,16 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <vector>
 #include "high_res_clock.hpp"
 
+#define boost ::std
+
 using asio::ip::tcp;
-using boost::posix_time::ptime;
-using boost::posix_time::microsec_clock;
 
 const int num_samples = 100000;
 

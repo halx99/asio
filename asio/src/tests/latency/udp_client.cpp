@@ -9,7 +9,6 @@
 //
 
 #include <asio/ip/udp.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -18,8 +17,8 @@
 #include "high_res_clock.hpp"
 
 using asio::ip::udp;
-using boost::posix_time::ptime;
-using boost::posix_time::microsec_clock;
+
+#define boost std
 
 const int num_samples = 100000;
 

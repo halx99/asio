@@ -10,10 +10,12 @@
 
 #include "asio.hpp"
 #include <algorithm>
-#include <boost/bind/bind.hpp>
+#include <functional>
 #include <iostream>
 #include <list>
 #include "handler_allocator.hpp"
+
+#define boost ::std
 
 class session
 {
@@ -211,7 +213,7 @@ int main(int argc, char* argv[])
     while (--thread_count > 0)
     {
       asio::thread* new_thread = new asio::thread(
-          boost::bind(&asio::io_context::run, &ioc));
+          boost::bind(static_cast<asio::io_context::count_type(asio::io_context::*)()>(&asio::io_context::run), &ioc));
       threads.push_back(new_thread);
     }
 

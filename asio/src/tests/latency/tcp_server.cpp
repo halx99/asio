@@ -12,11 +12,13 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/read.hpp>
 #include <asio/write.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+
+#define boost ::std
 
 using asio::ip::tcp;
 

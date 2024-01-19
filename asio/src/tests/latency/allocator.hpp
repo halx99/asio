@@ -11,7 +11,7 @@
 #ifndef ALLOCATOR_HPP
 #define ALLOCATOR_HPP
 
-#include <boost/aligned_storage.hpp>
+#include <type_traits>
 
 // Represents a single connection from a client.
 class allocator
@@ -46,7 +46,7 @@ private:
   bool in_use_;
 
   // The reusable memory space made available by the allocator.
-  boost::aligned_storage<1024>::type space_;
+  std::aligned_storage<1024>::type space_;
 };
 
 #endif // ALLOCATOR_HPP

@@ -1,3 +1,8 @@
 /*.cpp
 /*.hpp
 /boost
+/cache
+/**/*_d
+/build_*
+/out
+/.vs
