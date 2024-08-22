@@ -41,15 +41,32 @@ macro(source_group_by_dir proj_dir source_files)
 endmacro(source_group_by_dir)
 
 file(GLOB_RECURSE asio_source_files ${CMAKE_CURRENT_LIST_DIR}/asio/include/*.hpp;${CMAKE_CURRENT_LIST_DIR}/asio/include/*.ipp)
-list(APPEND asio_source_files asio/dummy.cpp)
+list(APPEND asio_source_files asio/src/asio.cpp)
+
+find_package(OpenSSL)
+if(OPENSSL_FOUND)
+    list(APPEND asio_source_files asio/src/asio_ssl.cpp)
+endif()
 source_group_by_dir(${CMAKE_CURRENT_LIST_DIR} asio_source_files)
 
 add_library(asio ${asio_source_files})
+target_compile_features(asio PUBLIC cxx_std_17)
+target_include_directories(asio PUBLIC ${CMAKE_CURRENT_LIST_DIR}/asio/include)
+target_compile_definitions(asio PUBLIC ASIO_SEPARATE_COMPILATION=1)
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(asio PUBLIC ASIO_DYN_LINK=1)
+endif()
+
+if(OPENSSL_FOUND)
+    target_include_directories(asio PRIVATE "${OPENSSL_INCLUDE_DIR}")
+    target_link_libraries(asio OpenSSL::SSL OpenSSL::Crypto)
+endif()
 
 add_library(asio-header-only INTERFACE)
 add_library(asio::asio-header-only ALIAS asio-header-only)
 target_include_directories(asio-header-only INTERFACE ${CMAKE_CURRENT_LIST_DIR}/asio/include)
 target_compile_features(asio-header-only INTERFACE cxx_std_17)
+target_compile_definitions(asio-header-only INTERFACE ASIO_HEADER_ONLY=1)
 
 if(ASIO_WITH_EXAMPLES)
     # 
