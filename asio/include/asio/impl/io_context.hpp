@@ -2,7 +2,7 @@
 // impl/io_context.hpp
 // ~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2024 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2025 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,6 +15,7 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
+#include "asio/config.hpp"
 #include "asio/detail/completion_handler.hpp"
 #include "asio/detail/executor_op.hpp"
 #include "asio/detail/fenced_block.hpp"
@@ -27,6 +28,30 @@
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
+
+template <typename Allocator>
+io_context::io_context(allocator_arg_t, const Allocator& a)
+  : execution_context(std::allocator_arg, a, config_from_concurrency_hint()),
+    impl_(asio::make_service<impl_type>(*this))
+{
+}
+
+template <typename Allocator>
+io_context::io_context(allocator_arg_t,
+    const Allocator& a, int concurrency_hint)
+  : execution_context(std::allocator_arg, a,
+      config_from_concurrency_hint(concurrency_hint)),
+    impl_(asio::make_service<impl_type>(*this))
+{
+}
+
+template <typename Allocator>
+io_context::io_context(allocator_arg_t, const Allocator& a,
+    const execution_context::service_maker& initial_services)
+  : execution_context(std::allocator_arg, a, initial_services),
+    impl_(asio::make_service<impl_type>(*this))
+{
+}
 
 #if !defined(GENERATING_DOCUMENTATION)
 

@@ -2,7 +2,7 @@
 // impl/spawn.hpp
 // ~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2024 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2025 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -391,7 +391,7 @@ public:
   static return_type on_resume(result_type& result)
   {
     if (*result != no_error)
-      asio::throw_exception(*result);
+      asio::throw_exception(static_cast<Disposition&&>(*result));
   }
 
 private:
@@ -501,7 +501,10 @@ public:
   static return_type on_resume(result_type& result)
   {
     if (*result.disposition_ != no_error)
-      asio::throw_exception(*result.disposition_);
+    {
+      asio::throw_exception(
+          static_cast<Disposition&&>(*result.disposition_));
+    }
     return static_cast<return_type&&>(*result.value_);
   }
 
@@ -620,7 +623,10 @@ public:
   static return_type on_resume(result_type& result)
   {
     if (*result.disposition_ != no_error)
-      asio::throw_exception(*result.disposition_);
+    {
+      asio::throw_exception(
+          static_cast<Disposition&&>(*result.disposition_));
+    }
     return static_cast<return_type&&>(*result.value_);
   }
 
@@ -635,6 +641,8 @@ inline bool asio_handler_is_continuation(spawn_handler<Executor, Signature>*)
 }
 
 } // namespace detail
+
+#if !defined(GENERATING_DOCUMENTATION)
 
 template <typename Executor, typename Signature>
 class async_result<basic_yield_context<Executor>, Signature>
@@ -707,6 +715,8 @@ public:
 
 #endif // defined(ASIO_HAS_VARIADIC_LAMBDA_CAPTURES)
 };
+
+#endif // !defined(GENERATING_DOCUMENTATION)
 
 namespace detail {
 
